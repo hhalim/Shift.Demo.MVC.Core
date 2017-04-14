@@ -1,0 +1,225 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-sm-7">
+        <div class="command-bar btn-group-sm">
+            <a href="#" class="btn btn-default" data-action="" data-key="refresh">Refresh</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("Reset", "Dashboard")" data-key="reset">Reset</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("Delete", "Dashboard")" data-key="delete">Delete</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("Stop", "Dashboard")" data-key="stop">Set to Stop</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("RunNow", "Dashboard")" data-key="run-now">Set to Run-Now</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("RunSelected", "Dashboard")" data-key="run-selected">Run Selected</a>
+        </div>
+    </div>
+
+    <div class="col-sm-5">
+        <div class="command-bar btn-group-sm pull-right">
+            <a href="#" class="btn btn-default" data-action="@Url.Action("RunServer", "Dashboard")" data-key="run-server">Run Server</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("StopServer", "Dashboard")" data-key="stop-server">Stop Server</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("CleanUp", "Dashboard")" data-key="clean-up">Server Clean Up</a>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 15px;">
+    <div class="col-sm-12">
+        <div id="grid"></div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+var readDataUrl = '@Url.Action("ReadData", "Dashboard")';
+var methodUrl = '@Url.Action("Index", "Method")';
+var rtProgressUrl = '@Url.Action("Index", "RTProgress")';
+
+$(document).ready(function () {
+    initializeGrid();
+    initCommands();
+});
+
+function initializeGrid() {
+    var dateField = function (config) {
+        jsGrid.Field.call(this, config);
+    };
+    dateField.prototype = new jsGrid.Field({
+        align: "center",
+        sorter: function (date1, date2) {
+            return new Date(date1) - new Date(date2);
+        },
+        itemTemplate: function (value) {
+            if (value) {
+                var date = new Date(value);
+                return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            } else {
+                return;
+            }
+        }
+    });
+    jsGrid.fields.date = dateField;
+
+    var longText = function (config) {
+        jsGrid.Field.call(this, config);
+    };
+    longText.prototype = new jsGrid.Field({
+        itemTemplate: function (value, item) {
+            if (value)
+                return '<div style="overflow-y: auto; max-height: 60px;">' + value + '</div>';
+            else
+                return;
+        }
+    });
+    jsGrid.fields.longtext = longText;
+
+    $("#grid").jsGrid({
+        width: "100%",
+        height: "auto",
+
+        inserting: false,
+        editing: false,
+        sorting: false,
+
+        paging: true,
+        pageIndex: 1,
+        pageSize: 20,
+        pageLoading: true,
+        pagerFormat: "{prev} {pages} {next}      {pageIndex} of {pageCount}",
+
+        loadIndication: true,
+        loadIndicationDelay: 500,
+        loadMessage: "Please, wait...",
+        loadShading: true,
+
+        fields: [
+            {
+                name: "chkSelect", type: "checkbox", width: "25", title: "", align: "center",
+                headerTemplate: function (value, item) {
+                    return '<input type="checkbox" class="all-sel" />';
+                },
+                itemTemplate: function (value, item) {
+                    return '<input type="checkbox" value="' + item.JobID + '" class="row-sel" />';
+                }
+            },
+            {
+                name: "JobID", type: "text", width: "60",
+                itemTemplate: function (value, item) {
+                    return '<div style="overflow-y: auto;"> <a href="' + rtProgressUrl + '?jobID=' + value + '" target="_blank">' + value + '</a></div>';
+                }
+            },
+            { name: "AppID", type: "longtext", width: "70" },
+            { name: "UserID", type: "text", width: "40", title: "UID", visible: false },
+            { name: "ProcessID", type: "longtext", width: "70", title: "PID" },
+            { name: "JobType", type: "text", width: "60", title: "Type", visible: false },
+            {
+                name: "JobName", type: "text", width: "60", title: "Name",
+                itemTemplate: function (value, item) {
+                    return '<a href="' + methodUrl + '?jobID=' + item.JobID + '" target="_blank">' + value + '</a>';
+                }
+            },
+            { name: "InvokeMeta", type: "text", visible: false },
+            { name: "Parameters", type: "text", visible: false },
+            { name: "Status", type: "number", visible: false },
+            { name: "Command", type: "text", width: "70" },
+            { name: "StatusLabel", type: "text", width: "70", title: "Status" },
+            { name: "Percent", type: "text", width: "50", title: "%" },
+            { name: "Note", type: "longtext", width: "120" },
+            { name: "Data", type: "longtext", width: "120" },
+            { name: "Error", type: "longtext", width: "120" },
+            { name: "Start", type: "date", width: "80" },
+            { name: "End", type: "date", width: "80" },
+            { name: "Created", type: "date", width: "80" }
+        ],
+
+        autoload: true,
+        controller: {
+            loadData: function (filter) {
+                var d = $.Deferred();
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: readDataUrl,
+                    data: filter
+                }).done(function (response) {
+                    d.resolve(response);
+                    return;
+                });
+                return d.promise();
+            }
+        }
+    });
+}
+
+function initCommands() {
+    $('#grid').on('click', 'input.all-sel', function () {
+        var that = $(this);
+        var checkboxes = that.closest('.jsgrid').find('input.row-sel')
+        checkboxes.prop("checked", that.prop("checked"));
+    });
+
+    $('.command-bar a[data-key]').click(function () {
+        var $this = $(this);
+        var key = $this.attr('data-key');
+        var action = $this.attr('data-action');
+        var grid = $('#grid');
+        var ids;
+        switch (key) {
+            case 'refresh':
+                grid.jsGrid('render');
+                break;
+            case 'reset':
+            case 'delete':
+            case 'stop':
+            case 'run-now':
+            case 'run-selected':
+                ids = getSelectedRecords('#grid');
+                if (confirm('Are you sure you want to ' + key.toUpperCase() + ' jobs?')) {
+                    $.post(action, { "ids": ids }, function (result) {
+                        grid.jsGrid('render');
+                    });
+                }
+                break;
+            case 'clean-up':
+                if (confirm('Are you sure you want to ' + key.toUpperCase() + ' jobs?')) {
+                    $.post(action, null, function (result) {
+                        grid.jsGrid('render');
+                    });
+                }
+                break;
+            case 'run-server':
+                ids = getSelectedRecords('#grid');
+                if (confirm('Are you sure you want to ' + key.toUpperCase() + '?')) {
+                    $.post(action, null, function (result) {
+                        grid.jsGrid('render');
+                        alert('Shift Server is now running.');
+                    });
+                }
+                break;
+            case 'stop-server':
+                ids = getSelectedRecords('#grid');
+                if (confirm('Are you sure you want to ' + key.toUpperCase() + '?')) {
+                    $.post(action, null, function (result) {
+                        grid.jsGrid('render');
+                        alert('Shift Server stopped.');
+                    });
+                }
+                break;
+        }
+        return false;
+    });
+
+    function getSelectedRecords(divSel) {
+        var selected = $(divSel + ' input.row-sel:checked');
+        var ids = [];
+        selected.each(function () {
+            ids.push($(this).val());
+        });
+
+        return ids;
+    }
+}
+
+    </script>
+}
