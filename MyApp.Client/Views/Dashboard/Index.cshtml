@@ -106,7 +106,7 @@ function initializeGrid() {
             {
                 name: "JobID", type: "text", width: "60",
                 itemTemplate: function (value, item) {
-                    return '<div style="overflow-y: auto;"> <a href="' + rtProgressUrl + '?jobID=' + value + '" target="_blank">' + value + '</a></div>';
+                    return '<div style="overflow-y: auto;"> <a href="' + rtProgressUrl + '/' + value + '" target="_blank">' + value + '</a></div>';
                 }
             },
             { name: "AppID", type: "longtext", width: "70" },
@@ -116,7 +116,7 @@ function initializeGrid() {
             {
                 name: "JobName", type: "text", width: "60", title: "Name",
                 itemTemplate: function (value, item) {
-                    return '<a href="' + methodUrl + '?jobID=' + item.JobID + '" target="_blank">' + value + '</a>';
+                    return '<a href="' + methodUrl + '/' + item.JobID + '" target="_blank">' + value + '</a>';
                 }
             },
             { name: "InvokeMeta", type: "text", visible: false },

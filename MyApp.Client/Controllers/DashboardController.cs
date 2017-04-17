@@ -31,7 +31,6 @@ namespace MyApp.Client.Controllers
             return View();
         }
 
-        //[HttpGet]
         public async Task<IActionResult> ReadData(int? pageIndex, int? pageSize)
         {
             var jobViewList = await jobClient.GetJobViewsAsync(pageIndex, pageSize).ConfigureAwait(false);

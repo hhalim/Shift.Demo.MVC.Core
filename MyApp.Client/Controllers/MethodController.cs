@@ -9,6 +9,7 @@ using Shift;
 
 namespace MyApp.Client.Controllers
 {
+    [Route("[controller]")]
     public class MethodController : Controller
     {
         private static JobClient jobClient;
@@ -21,7 +22,8 @@ namespace MyApp.Client.Controllers
             }
         }
 
-        public async Task<IActionResult> Index([FromQuery]string jobID)
+        [Route("[action]/{jobID?}")]
+        public async Task<IActionResult> Index(string jobID)
         {
             ViewBag.JobView = await jobClient.GetJobViewAsync(jobID);
 

@@ -8,6 +8,7 @@ using Shift;
 
 namespace MyApp.Client.Controllers
 {
+    [Route("[controller]")]
     public class RTProgressController : Controller
     {
         private static JobClient jobClient;
@@ -20,12 +21,14 @@ namespace MyApp.Client.Controllers
             }
         }
 
-        public IActionResult Index(string jobID)
+        [Route("[action]/{jobID?}")]
+        public async Task<IActionResult> Index(string jobID)
         {
             ViewBag.JobID = jobID;
             return View();
         }
 
+        [Route("[action]/{jobID?}")]
         public async Task<IActionResult> GetProgress(string jobID)
         {
             var jsProgress = await jobClient.GetProgressAsync(jobID).ConfigureAwait(false);
