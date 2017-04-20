@@ -1,7 +1,8 @@
-﻿
+﻿@using Shift.Entities;
+
 @{
     ViewBag.Title = "Job Detail";
-    var job = ViewBag.JobView as Shift.Entities.JobView;
+    var job = ViewBag.JobView as JobView;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -60,7 +61,7 @@
         </p>
         <p>
             <label>Parameters:</label> <br />
-            <span>@Shift.Entities.Helpers.Decrypt(job.Parameters, "")</span>
+            <span>@Helpers.Decrypt(job.Parameters, "")</span>
         </p>
     </div>
 </div>

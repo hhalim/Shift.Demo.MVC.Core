@@ -61,21 +61,19 @@
     <environment names="Development">
         <script src="~/lib/jquery/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/js/common.js"></script>
+        <script src="~/js/common.js" asp-append-version="true"></script>
         <script src="~/js/jsgrid.js"></script>
     </environment>
     <environment names="Staging,Production">
-        <script src="~/lib/jquery/jquery.js"></script>
+        <script src="~/lib/jquery/jquery.min.js"></script>
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
                 crossorigin="anonymous"
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-        <script src="~/js/common.js"></script>
-        <script src="~/js/jsgrid.js"></script>
+        <script src="~/js/common.min.js" asp-append-version="true"></script>
+        <script src="~/js/jsgrid.min.js"></script>
     </environment>
 
     @RenderSection("Scripts", required: false)
