@@ -88,7 +88,7 @@ namespace MyApp.Client
             serverConfig.CacheConfigurationString = shiftConfig["RedisConfiguration"]; //required only if UseCache = true
             serverConfig.EncryptionKey = shiftConfig["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
             serverConfig.MaxRunnableJobs = Convert.ToInt32(shiftConfig["MaxRunnableJobs"]);
-            serverConfig.ProcessID = shiftConfig["ShiftPID"];
+            //serverConfig.ProcessID = shiftConfig["ShiftPID"];
             serverConfig.Workers = Convert.ToInt32(shiftConfig["ShiftWorkers"]);
 
             serverConfig.StorageMode = shiftConfig["StorageMode"];
