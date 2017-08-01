@@ -11,10 +11,6 @@
     <EmbeddedResource Remove="Helpers\**" />
     <None Remove="Helpers\**" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="appsettings.json.Azure.BAK" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
@@ -24,7 +20,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="1.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Shift" Version="1.0.7.9" />
+    <PackageReference Include="Shift" Version="1.0.8" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
