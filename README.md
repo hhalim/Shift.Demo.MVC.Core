@@ -8,7 +8,7 @@ Or to use the SQL Server:
 - Run the sql script to create Shift database in [/setup/create_db.sql](https://github.com/hhalim/Shift.Demo.Mvc.Core/blob/master/setup/create_db.sql). 
 - If you want to use Redis cache, setup and create a Redis instance. 
 
-Open this project solution in Visual Studio, update the appsettings.json connection string and cache.
+Open this project solution in Visual Studio 2017, update the appsettings.json connection string and cache.
 ```
   "Shift": {
     //    "ShiftDBConnection": "Data Source=localhost\\SQL2014;Initial Catalog=ShiftJobsDB;Integrated Security=SSPI;", //MS SQL
