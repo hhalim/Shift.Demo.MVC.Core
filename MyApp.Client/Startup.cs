@@ -74,8 +74,6 @@ namespace MyApp.Client
             var clientConfig = new Shift.ClientConfig();
             clientConfig.DBConnectionString = shiftConfig["ShiftDBConnection"];
             clientConfig.DBAuthKey = shiftConfig["DocumentDBAuthKey"];
-            clientConfig.UseCache = Convert.ToBoolean(shiftConfig["UseCache"]);
-            clientConfig.CacheConfigurationString = shiftConfig["RedisConfiguration"]; //required only if UseCache = true
             clientConfig.EncryptionKey = shiftConfig["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
             clientConfig.StorageMode = shiftConfig["StorageMode"];
             cache.Set("Shift.JobClient", new JobClient(clientConfig), cacheOptions); //only the DBConnectionString and CacheConfigurationString are required for Client's background job
@@ -84,8 +82,6 @@ namespace MyApp.Client
             var serverConfig = new Shift.ServerConfig();
             serverConfig.DBConnectionString = shiftConfig["ShiftDBConnection"];
             serverConfig.DBAuthKey = shiftConfig["DocumentDBAuthKey"];
-            serverConfig.UseCache = Convert.ToBoolean(shiftConfig["UseCache"]);
-            serverConfig.CacheConfigurationString = shiftConfig["RedisConfiguration"]; //required only if UseCache = true
             serverConfig.EncryptionKey = shiftConfig["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
             serverConfig.MaxRunnableJobs = Convert.ToInt32(shiftConfig["MaxRunnableJobs"]);
             //serverConfig.ProcessID = shiftConfig["ShiftPID"];
